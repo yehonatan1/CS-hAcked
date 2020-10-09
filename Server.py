@@ -58,27 +58,26 @@ def main():
     data = s.recv(1024)
     print(data.decode())
 
+    i = 0
+
     for option in options:
-        try:
-            i = 0
-            words = option.split(' ')
-            for word in words:
-                i += 1
-                word += "\n"
-                print(word)
-                arc4 = ARC4('csa-mitm-key')
-                cipher = arc4.encrypt(word)
-                s.send(cipher)
+        words = option.split(' ')
+        for word in words:
+            i += 1
+            word += "\n"
+            print(word)
+            arc4 = ARC4('csa-mitm-key')
+            cipher = arc4.encrypt(word)
+            s.send(cipher)
 
-                if i % 10 == 0 and i != 0 and i != 1:
-                    response = s.recv(4096)
-                    if response != b'\x01:\xa12$\xc1O,A\x82\xee\x08}\x80\x1f\x10T\xc9\x92\xa5_\x1b\xec@\xf3\xdb;\x952\xea8\xf9' and response != b'Welcome! your RC4 key is: csa-mitm-key\n':
-                        print(response)
+        response = s.recv(4096)
+        if response != b'\x01:\xa12$\xc1O,A\x82\xee\x08}\x80\x1f\x10T\xc9\x92\xa5_\x1b\xec@\xf3\xdb;\x952\xea8\xf9' and response != b'Welcome! your RC4 key is: csa-mitm-key\n':
+            print(i)
+            print(response)
+            return response
 
-        except socket.error:
-            print("Exception")
-            s = socket.socket()
-            s.connect(("3.126.154.76", 80))
+        s = socket.socket()
+        s.connect(("3.126.154.76", 80))
 
     print(i)
 

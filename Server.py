@@ -61,7 +61,6 @@ def main():
     # for counting how many words did i send to the server
     i = 0
     response = s.recv(1024)
-    print('response is ' + str(response))
 
     # looping for each possible sequence
     for option in options:

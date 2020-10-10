@@ -60,7 +60,6 @@ def main():
 
     # for counting how many words did i send to the server
     i = 0
-    response = s.recv(1024)
 
     # looping for each possible sequence
     for option in options:
@@ -89,6 +88,8 @@ def main():
         # creating a new connection to the server
         s = socket.socket()
         s.connect(("3.126.154.76", 80))
+        data = s.recv(1024)
+        print(data.decode())
 
     print(i)
 

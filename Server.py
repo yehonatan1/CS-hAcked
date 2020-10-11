@@ -52,17 +52,17 @@ options = ['organization administration I as I environmental about accept abilit
 
 
 def main():
-    s = socket.socket()
-    s.connect(("3.126.154.76", 80))
-
-    data = s.recv(1024)
-    print(data.decode())
-
     # for counting how many words did i send to the server
     i = 0
 
     # looping for each possible sequence
     for option in options:
+        # creating a new connection to the server
+        s = socket.socket()
+        s.connect(("3.126.154.76", 80))
+        data = s.recv(1024)
+        data1 = s.recv(1024)
+
         words = option.split(' ')
         for word in words:
             i += 1
@@ -76,7 +76,8 @@ def main():
             cipher = arc4.encrypt(word)
             s.send(cipher)
 
-        response = s.recv(4096)
+        response = s.recv(1024)
+        print(response)
 
         # checking if the response is not some crap
         if response != b'\x01:\xa12$\xc1O,A\x82\xee\x08}\x80\x1f\x10T\xc9\x92\xa5_\x1b\xec@\xf3\xdb;\x952\xea8\xf9' and response != b'Welcome! your RC4 key is: csa-mitm-key\n' and response != b'\xee\x08}\x80\x1f\x10T\xc9\x92\xa5_\x1b\xec@\xf3\xdb;\x952\xea8\xf9':
@@ -84,12 +85,6 @@ def main():
             print(response)
             print(arc4.decrypt(response))
             return response
-
-        # creating a new connection to the server
-        s = socket.socket()
-        s.connect(("3.126.154.76", 80))
-        data = s.recv(1024)
-        print(data.decode())
 
     print(i)
 
